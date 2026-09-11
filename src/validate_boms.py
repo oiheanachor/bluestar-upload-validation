@@ -1591,17 +1591,13 @@ def validate_boms(
             "Duplicate Match Rows",
             "Unexpected Rows",
             "Parents Expected",
-            "Parent Structures Changed",
+            "Parents With Count Mismatch",
             "Unique BOM Parents With Errors",
-            "Parents With Missing Lines",
-            "Parents With Unexpected Lines",
-            "Parents With Quantity Mismatches",
-            "Parents With Duplicate Matches",
             "Protected BOMs Checked",
             "Protected BOM Failures",
-            "Passed Result Rows",
             "Failed Result Rows",
         ],
+        
         "Count": [
             len(prepared_bom_sheet),
 
@@ -1610,13 +1606,17 @@ def validate_boms(
             int(
                 bom_results_df[
                     "Processing Result"
-                ].eq("PASS_CREATED").sum()
+                ].eq(
+                    "PASS_CREATED"
+                ).sum()
             ),
 
             int(
                 bom_results_df[
                     "Processing Result"
-                ].eq("PASS_MODIFIED").sum()
+                ].eq(
+                    "PASS_MODIFIED"
+                ).sum()
             ),
 
             int(
@@ -1659,7 +1659,9 @@ def validate_boms(
                 ).sum()
             ),
 
-            len(uploaded_parent_keys),
+            len(
+                uploaded_parent_keys
+            ),
 
             sum(
                 expected_parent_counts.get(
@@ -1673,45 +1675,12 @@ def validate_boms(
                 for parent_key
                 in uploaded_parent_keys
             ),
+
             bom_results_df.loc[
-                bom_results_df["Overall Result"].eq(
+                bom_results_df[
+                    "Overall Result"
+                ].eq(
                     "FAIL"
-                ),
-                "Parent Item Number"
-            ].nunique(),
-
-            bom_results_df.loc[
-                bom_results_df["Failure Codes"]
-                .str.contains(
-                    "FAIL_MISSING_BOM_LINE",
-                    na=False
-                ),
-                "Parent Item Number"
-            ].nunique(),
-
-            bom_results_df.loc[
-                bom_results_df["Failure Codes"]
-                .str.contains(
-                    "FAIL_UNEXPECTED_BOM_LINE",
-                    na=False
-                ),
-                "Parent Item Number"
-            ].nunique(),
-
-            bom_results_df.loc[
-                bom_results_df["Failure Codes"]
-                .str.contains(
-                    "FAIL_QUANTITY_MISMATCH",
-                    na=False
-                ),
-                "Parent Item Number"
-            ].nunique(),
-
-            bom_results_df.loc[
-                bom_results_df["Failure Codes"]
-                .str.contains(
-                    "FAIL_MULTIPLE_BOM_CANDIDATES",
-                    na=False
                 ),
                 "Parent Item Number"
             ].nunique(),
@@ -1723,7 +1692,9 @@ def validate_boms(
             int(
                 protected_bom_results_df[
                     "Overall Result"
-                ].eq("FAIL").sum()
+                ].eq(
+                    "FAIL"
+                ).sum()
             )
             if not protected_bom_results_df.empty
             else 0,
@@ -1731,18 +1702,9 @@ def validate_boms(
             int(
                 bom_results_df[
                     "Overall Result"
-                ].isin(
-                    [
-                        "PASS",
-                        "PASS_WITH_WARNING",
-                    ]
+                ].eq(
+                    "FAIL"
                 ).sum()
-            ),
-
-            int(
-                bom_results_df[
-                    "Overall Result"
-                ].eq("FAIL").sum()
             ),
         ],
     }
