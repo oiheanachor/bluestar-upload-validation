@@ -1053,6 +1053,8 @@ def validate_items(
             "Missing Rows",
             "Duplicate Match Rows",
             "Wrong Variant Rows",
+            "Release Ready Items",
+            "Release Blocked Items",
         ],
         "Count": [
             len(results_df),
@@ -1063,6 +1065,39 @@ def validate_items(
             len(results_df[results_df["Processing Result"] == "FAIL_MISSING"]),
             len(results_df[results_df["Processing Result"] == "FAIL_MULTIPLE_CURRENT_CANDIDATES"]),
             len(results_df[results_df["Processing Result"] == "FAIL_WRONG_VARIANT"]),
+            len(
+                results_df[
+                    ~results_df["Failure Codes"]
+                    .str.contains(
+                        (
+                            "FAIL_NAME_BLANK|"
+                            "FAIL_AX_TEMPLATE_BLANK|"
+                            "FAIL_AX_TEMPLATE_INVALID|"
+                            "FAIL_INVALID_UPLOAD_STATUS|"
+                            "BLOCK_INVALID_PRODUCTION_STATUS|"
+                            "BLOCK_ITEMTYPE_BOM_DOWNGRADED"
+                        ),
+                        na=False
+                    )
+                ]
+            ),
+
+            len(
+                results_df[
+                    results_df["Failure Codes"]
+                    .str.contains(
+                        (
+                            "FAIL_NAME_BLANK|"
+                            "FAIL_AX_TEMPLATE_BLANK|"
+                            "FAIL_AX_TEMPLATE_INVALID|"
+                            "FAIL_INVALID_UPLOAD_STATUS|"
+                            "BLOCK_INVALID_PRODUCTION_STATUS|"
+                            "BLOCK_ITEMTYPE_BOM_DOWNGRADED"
+                        ),
+                        na=False
+                    )
+                ]
+            ),
         ],
     }
 
