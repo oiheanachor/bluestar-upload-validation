@@ -143,6 +143,7 @@ VALID_AX_TEMPLATES = {
     "BatchTrackConfigProd",
     "BatchTrackConfigPur",
     "BatchTrackingPur",
+    "BatchTrackingProd"
     "ConsigTrackPur",
     "NoTrackConfigPhan",
     "NoTrackConfigProd",
